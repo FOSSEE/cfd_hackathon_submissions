@@ -1,0 +1,797 @@
+<?php
+// $Id$
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+/*require_once 'general_deletion.inc';
+require_once 'email.inc';*/
+/**
+ * Implementation of hook_menu().
+ */
+function cfd_hackathon_submissions_menu()
+{
+    $items = array();
+    /* PROPOSAL */
+    $items['cfd-hackathon/add-project-title'] = array(
+        'title' => 'Add new project titles',
+        'description' => 'Add new project titles',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'add_project_title_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon add project titles',
+        ),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'add_project_titles.inc',
+    );
+    $items['cfd-hackathon/proposal'] = array(
+        'title' => 'cfd hackathon Proposal Form',
+        'description' => 'cfd hackathon Proposal Form',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_proposal_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon create proposal',
+        ),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'proposal.inc',
+    );
+    $items['cfd-hackathon/release'] = array(
+        'title' => 'Release the project title',
+        'description' => 'Release the project title',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_release_project_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon create proposal',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'release.inc',
+    );
+    $items['cfd-hackathon/upload-project-files'] = array(
+        'title' => 'cfd hackathon Project Directory Submission',
+        'description' => 'Abstract Submission',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('cfd_hackathon_submissions_upload_abstract_code_form'),
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'cfd hackathon upload abstract',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'upload_code.inc',
+    );
+     $items["cfd-hackathon/my-submissions"] = array(
+        "title" => "List of my submissions",
+        "page callback" => "cfd_hackathon_display_my_submissions",
+        "access arguments" => array(
+            "cfd hackathon create proposal"
+        ),
+        "type" => MENU_CALLBACK,
+        "file" => "my_submissions.inc"
+    );
+     $items["cfd-hackathon/all-submissions"] = array(
+        "title" => "List of all submissions",
+        "page callback" => "cfd_hackathon_display_all_submissions",
+        "access arguments" => array(
+            "cfd hackathon manage proposal"
+        ),
+        "type" => MENU_CALLBACK,
+        "file" => "all_submissions.inc"
+    );
+    $items['cfd-hackathon/manage-proposal'] = array(
+        'title' => 'Manage cfd hackathon Proposals',
+        'description' => 'Manage Case StudyProposals',
+        'page callback' => 'cfd_hackathon_submissions_proposal_pending',
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/manage-proposal/pending'] = array(
+        'title' => 'Pending Proposals',
+        'description' => 'Pending cfd hackathon Proposals Queue',
+        'page callback' => 'cfd_hackathon_submissions_proposal_pending',
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+        'weight' => 1,
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/manage-proposal/all'] = array(
+        'title' => 'All Proposals',
+        'description' => 'All Proposals',
+        'page callback' => 'cfd_hackathon_submissions_proposal_all',
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 4,
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/manage-proposal/edit-upload-file'] = array(
+        'title' => 'Edit code files',
+        'description' => 'Edit code files',
+        'page callback' => 'cfd_hackathon_submissions_proposal_edit_file_all',
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 4,
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/manage-proposal/approve'] = array(
+        'title' => 'Approve Proposal',
+        'description' => 'Approve Proposal',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_proposal_approval_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/manage-proposal/edit'] = array(
+        'title' => 'Edit Proposal',
+        'description' => 'Edit Proposal',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_proposal_edit_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/manage-proposal/status'] = array(
+        'title' => 'Proposal Status',
+        'description' => 'Proposal Status',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_proposal_status_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon approve proposal',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'manage_proposal.inc',
+    );
+    $items['cfd-hackathon/abstract-approval/bulk'] = array(
+        'title' => 'CS Manage Code',
+        'description' => 'Bulk Mangage',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_abstract_bulk_approval_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon bulk manage abstract',
+        ),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 2,
+        'file' => 'abstract_bulk_approval.inc',
+    );
+    /* CODE UPLOAD */
+    $items['cfd-hackathon/abstract-code/edit-upload-files'] = array(
+        'title' => 'cfd hackathon Project Directory edit uploaded files for proposal',
+        'description' => 'Project Edit Upload',
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_access',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_edit_upload_abstract_code_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon upload abstract',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'upload_code.inc',
+        'weight' => 2,
+    );
+
+    /*$items['cfd-hackathon/abstract-code/upload'] = array(
+        'title' => 'cfd hackathon Project Directory Submission',
+        'description' => 'Project Upload',
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_access',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_upload_abstract_code_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon upload abstract',
+        ),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'upload_code.inc',
+        'weight' => 2,
+    );*/
+    $items['cfd-hackathon/abstract-code/delete'] = array(
+        'title' => 'Delete Solution',
+        'description' => 'Delete Solution',
+        'page callback' => 'cfd_hackathon_submissions_upload_code_delete',
+        'access arguments' => array(
+            'cfd hackathon upload code',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'upload_code_delete.inc',
+    );
+    /* CODE DOWNLOADS */
+    $items['cfd-hackathon/full-download/project'] = array(
+        'title' => 'Code Download',
+        'description' => 'Code Download',
+        'page callback' => 'cfd_hackathon_submissions_download_full_project',
+        'access arguments' => array(
+            'cfd hackathon download code',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'full_download.inc',
+    );
+    /* COMPLETED  Case studies */
+    $items['cfd-hackathon/completed-case-studies'] = array(
+        'title' => 'Completed Case studies',
+        'page callback' => 'cfd_hackathon_submissions_completed_proposals_all',
+        'access arguments' => array(
+            'cfd hackathon download code',
+        ),
+        'file' => 'cfd_hackathon_submissions_details.inc',
+    );
+    /* LABS IN PROGRESS */
+    $items['cfd-hackathon/case-study-progress'] = array(
+        'title' => 'Case studies in Progress',
+        'page callback' => 'cfd_hackathon_submissions_progress_all',
+        'access arguments' => array(
+            'cfd hackathon download code',
+        ),
+        'file' => 'cfd_hackathon_submissions_details.inc',
+    );
+    $items['cfd-hackathon/list-of-project-titles'] = array(
+        'title' => 'List of available Project titles',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('list_of_available_project_titles_form'),
+        'access arguments' => array(
+            'cfd hackathon Project titles list',
+        ),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'available_project_titles_list.inc',
+    );
+    /* DOWNLOAD FOR EVERYONE */
+    $items['cfd-hackathon/case-study-run'] = array(
+        'title' => 'Download Codes',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_run_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon download code',
+        ),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'run.inc',
+    );
+    $items['cfd-hackathon/download/resource-file'] = array(
+        'title' => 'Download user defined compound file',
+        'description' => 'Download resource file',
+        'page callback' => 'cfd_hackathon_submissions_download_upload_file',
+        'access arguments' => array(
+            'download code',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'download.inc',
+    );
+    $items['cfd-hackathon/download/project-title-file'] = array(
+        'title' => 'Download Project Title file',
+        'description' => 'Download Project Title file',
+        'page callback' => 'download_case_study_project_title_files',
+        'access arguments' => array(
+            'download code',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'available_project_titles_list.inc',
+    );
+    $items['cfd-hackathon/download/project-file'] = array(
+        'title' => 'Download Project file',
+        'description' => 'Download project file',
+        'page callback' => 'cfd_hackathon_submissions_project_files',
+        'access arguments' => array(
+            'download code',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'download.inc',
+    );
+    /* ADMIN SETTINGS */
+    $items['admin/settings/hackathon'] = array(
+        'title' => 'cfd hackathon Settings',
+        'description' => 'cfd hackathon Settings',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_submissions_settings_form',
+        ),
+        'access arguments' => array(
+            'administer  Case Study',
+        ),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'settings.inc',
+    );
+    /* AJAX REQUEST */
+    $items['cfd-hackathon/certificates'] = array(
+        'title' => 'List of cfd hackathon Certificates',
+        'description' => 'List of cfd hackathon Certificates',
+        'page callback' => '_list_case_study_certificates',
+        'access arguments' => array(
+            'list cfd hackathon certificates',
+        ),
+        'file' => 'pdf/list_case_study_certificate.inc',
+    );
+    $items['cfd-hackathon/certificates/generate-pdf'] = array(
+        'title' => 'Download Certificate',
+        'description' => 'Download Certificate',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'generate_pdf',
+        ),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array(
+            'generate pdf',
+        ),
+        'file' => 'pdf/cert_new.inc',
+    );
+    /*$items['cfd-hackathon/certificates-custom'] = array(
+    'title'=> 'List of cfd hackathon Custom Certificates',
+    'description'=> 'List of cfd hackathon Custom Certificates',
+    'page callback'=> '_list_cfd_hackathon_submissions_custom_certificates',
+    'access arguments'=> array(
+    'list cfd hackathon custom certificates'
+    ),
+    'file'=> 'pdf/list_mentor_certificates.inc'
+    );
+    $items['cfd-hackathon/certificates-custom/pdf'] = array(
+    'title'=> 'Download Certificate',
+    'description'=> 'Download Certificate',
+    'page callback'=> 'drupal_get_form',
+    'page arguments'=> array(
+    'generate_pdf'
+    ),
+    'type'=> MENU_CALLBACK,
+    'access arguments'=> array(
+    'generate pdf'
+    ),
+    'file'=> 'pdf/mentor_cert_pdf.inc'
+    ); */
+    $items['cfd-hackathon/certificates/verify'] = array(
+        "title" => "Certificate Verification",
+        "page callback" => "verify_certificates",
+        'page arguments' => array(
+            'verify_certificates',
+        ),
+        "access arguments" => array(
+            "verify certificates",
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'pdf/verify_certificates.inc',
+    );
+    return $items;
+}
+/**
+ * Implementation of hook_perm().
+ */
+function cfd_hackathon_submissions_permission()
+{
+    return array(
+        'cfd hackathon add project titles' => array(
+            'title' => t('cfd hackathon add project titles'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon create proposal' => array(
+            'title' => t('cfd hackathon create proposal'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon manage proposal' => array(
+            'title' => t('cfd hackathon manage proposal'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon edit proposal' => array(
+            'title' => t('cfd hackathon edit proposal'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon approve proposal' => array(
+            'title' => t('cfd hackathon approve proposal'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon propose solution' => array(
+            'title' => t('cfd hackathon propose solution'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon Project titles list' => array(
+            'title' => t('cfd hackathon Project titles list'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon approve abstract' => array(
+            'title' => t('cfd hackathon approve code'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon bulk manage abstract' => array(
+            'title' => t('cfd hackathon bulk manage abstract'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon bulk delete abstract' => array(
+            'title' => t('cfd hackathon bulk delete code'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon upload abstract' => array(
+            'title' => t('cfd hackathon upload code'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon download code' => array(
+            'title' => t('cfd hackathon download code'),
+            'restrict access' => true,
+        ),
+        'administer  Case Study' => array(
+            'title' => t('administer  Case Study'),
+            'restrict access' => true,
+        ),
+        'cfd hackathon generate abstract' => array(
+            'title' => t('cfd hackathon generate abstract'),
+            'restrict access' => true,
+        ),
+        "list cfd hackathon certificates" => array(
+            "title" => t("list the certificates"),
+            "description" => t("list the certificates"),
+            'restrict access' => true,
+        ),
+        "list cfd hackathon custom certificates" => array(
+            "title" => t("list the mentor certificates"),
+            "description" => t("list the mentor certificates"),
+            'restrict access' => true,
+        ),
+        "verify certificates" => array(
+            "title" => t("verify the certificates"),
+            "description" => t("verify the certificates"),
+            'restrict access' => true,
+        ),
+
+    );
+}
+/*************************** VALIDATION FUNCTIONS *****************************/
+function cfd_hackathon_submissions_check_valid_filename($file_name)
+{
+    if (!preg_match('/^[0-9a-zA-Z\.\_]+$/', $file_name)) {
+        return false;
+    } else if (substr_count($file_name, ".") > 1) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+function cfd_hackathon_submissions_check_name($name = '')
+{
+    if (!preg_match('/^[0-9a-zA-Z\ ]+$/', $name)) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+function cfd_hackathon_submissions_check_code_number($number = '')
+{
+    if (!preg_match('/^[0-9]+$/', $number)) {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+function cfd_hackathon_submissions_path()
+{
+    return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'cfd_uploads/hackathon_uploads/';
+}
+function cfd_hackathon_submissions_file_path($value = '')
+{
+    return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'cfd_uploads/';
+}
+function cfd_hackathon_submissions_project_titles_resource_file_path()
+{
+    return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'cfd_uploads/case_project_titles_resource_files/';
+}
+/************************* USER VERIFICATION FUNCTIONS ************************/
+function cfd_hackathon_submissions_get_proposal()
+{
+    global $user;
+    $query = db_select('cfd_hackathon_proposal');
+    $query->fields('cfd_hackathon_proposal');
+    $query->condition('uid', $user->uid);
+    $query->orderBy('id', 'DESC');
+    $query->range(0, 1);
+    $proposal_q = $query->execute();
+    $proposal_data = $proposal_q->fetchObject();
+    if (!$proposal_data) {
+        drupal_set_message("You do not have any approved  cfd hackathon proposal. Please propose a Case Study", 'error');
+        drupal_goto('');
+    } //!$proposal_data
+    switch ($proposal_data->approval_status) {
+        case 0:
+            drupal_set_message(t('Proposal is awaiting approval.'), 'status');
+            return false;
+        case 1:
+            return $proposal_data;
+        case 2:
+            drupal_set_message(t('Proposal has been dis-approved.'), 'error');
+            return false;
+        case 3:
+            drupal_set_message(t('Proposal has been marked as completed.'), 'status');
+            return false;
+        default:
+            drupal_set_message(t('Invalid proposal state. Please contact site administrator for further information.'), 'error');
+            return false;
+    } //$proposal_data->approval_status
+    return false;
+}
+/*************************************************************************/
+/***** Function To convert only first charater of string in uppercase ****/
+/*************************************************************************/
+/*function ucname($string)
+{
+$string = ucwords(strtolower($string));
+foreach (array(
+'-',
+'\''
+) as $delimiter)
+{
+if (strpos($string, $delimiter) !== false)
+{
+$string = implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
+} //strpos($string, $delimiter) !== false
+} //array( '-', '\'') as $delimiter
+return $string;
+}*/
+function _cfd_hackathon_sentence_case($string)
+{
+    $string = ucwords(strtolower($string));
+    foreach (array(
+        '-',
+        '\'',
+    ) as $delimiter) {
+        if (strpos($string, $delimiter) !== false) {
+            $string = implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
+        } //strpos($string, $delimiter) !== false
+    } //array( '-', '\'') as $delimiter
+    return $string;
+}
+function _cfd_hackathon_list_of_states()
+{
+    $states = array(
+        0 => '-Select-',
+    );
+    $query = db_select('list_states_of_india');
+    $query->fields('list_states_of_india');
+    //$query->orderBy('', '');
+    $states_list = $query->execute();
+    while ($states_list_data = $states_list->fetchObject()) {
+        $states[$states_list_data->state] = $states_list_data->state;
+    } //$states_list_data = $states_list->fetchObject()
+    return $states;
+}
+function _cfd_hackathon_list_of_cities()
+{
+    $city = array(
+        0 => '-Select-',
+    );
+    $query = db_select('list_cities_of_india');
+    $query->fields('list_cities_of_india');
+    $query->orderBy('city', 'ASC');
+    $city_list = $query->execute();
+    while ($city_list_data = $city_list->fetchObject()) {
+        $city[$city_list_data->city] = $city_list_data->city;
+    } //$city_list_data = $city_list->fetchObject()
+    return $city;
+}
+function _cfd_hackathon_list_of_pincodes()
+{
+    $pincode = array(
+        0 => '-Select-',
+    );
+    $query = db_select('list_of_all_india_pincode');
+    $query->fields('list_of_all_india_pincode');
+    $query->orderBy('pincode', 'ASC');
+    $pincode_list = $query->execute();
+    while ($pincode_list_data = $pincode_list->fetchObject()) {
+        $pincode[$pincode_list_data->pincode] = $pincode_list_data->pincode;
+    } //$pincode_list_data = $pincode_list->fetchObject()
+    return $pincode;
+}
+function _cfd_hackathon_list_of_departments()
+{
+    $department = array();
+    $query = db_select('list_of_departments');
+    $query->fields('list_of_departments');
+    $query->orderBy('id', 'DESC');
+    $department_list = $query->execute();
+    while ($department_list_data = $department_list->fetchObject()) {
+        $department[$department_list_data->department] = $department_list_data->department;
+    } //$department_list_data = $department_list->fetchObject()
+    return $department;
+}
+
+function _cfd_hackathon_list_of_case_studies($selected_version = NULL)
+{
+    $existing_case_studies = array();
+    $result = db_query("SELECT * from available_hackathon_project_titles WHERE project_title NOT IN( SELECT  project_title from cfd_hackathon_proposal where version = :version)", array(':version' => $selected_version));
+    //var_dump($result);die;
+    while ($case_study_list_data = $result->fetchObject()) {
+        $existing_case_studies[$case_study_list_data->project_title] = $case_study_list_data->project_title;
+    }
+    return $existing_case_studies;
+}
+
+//var_dump(_expected_date_of_completion("Study of flow around a re-entry space capsule and a parachute using Openfoam", "12 Oct 2023"));die;
+function _expected_date_of_completion($project_title, $proposal_creation_date){
+    $result = db_query("SELECT no_of_days from available_hackathon_project_titles WHERE project_title =:project_title", array(':project_title' => $project_title));
+    $no_of_days = $result->fetchObject()->no_of_days;
+    //var_dump($no_of_days);die;
+    $date_of_completion = strtotime("+". $no_of_days ." day", strtotime($proposal_creation_date));
+    $expected_date_of_completion = date('d-m-Y h:i A', strtotime("+1day", $date_of_completion));
+    return $expected_date_of_completion;
+
+}
+
+function _cfd_hackathon_list_of_versions(){
+    $versions = array();
+    $query = db_select('case_study_software_version');
+    $query->fields('case_study_software_version');
+    $version_list = $query->execute();
+    while($version_data = $version_list->fetchObject()){
+        $versions[$version_data->id] = $version_data->case_study_version;
+    }
+    return $versions;
+}
+
+function _cfd_hackathon_list_of_simulation_types(){
+    $simulation_types = array();
+    $query = db_select('case_study_simulation_type');
+    $query->fields('case_study_simulation_type');
+    $simulation_type_list = $query->execute();
+    while ($simulation_type_data = $simulation_type_list->fetchObject()) {
+        $simulation_types[$simulation_type_data->id] = $simulation_type_data->simulation_type;
+    }
+    return $simulation_types;
+}
+
+function _cfd_hackathon_list_of_solvers($simulation_id){
+    $simulation_id = $simulation_id;
+    $solvers = array(
+        0 => '-Select-',
+        );
+    $query = db_select('case_study_solvers');
+    $query->fields('case_study_solvers');
+    $query->condition('simulation_type_id',$simulation_id);
+    $solvers_list = $query->execute();
+    while($solvers_data = $solvers_list->fetchObject()){
+        $solvers[$solvers_data->solver_name] = $solvers_data->solver_name;
+    }
+    return $solvers;
+}
+
+function _cfd_hackathon_dir_name($project, $proposar_name)
+{
+    $project_title = ucname($project);
+    $proposar_name = ucname($proposar_name);
+    $dir_name = $project_title . ' By ' . $proposar_name;
+    $directory_name = str_replace("__", "_", str_replace(" ", "_", str_replace("/", "_", trim($dir_name))));
+    return $directory_name;
+}
+function cfd_hackathon_submissions_document_path()
+{
+    return $_SERVER['DOCUMENT_ROOT'] . base_path() . 'cfd_uploads/case_study_uploads/';
+}
+function cfd_hackathon_RenameDir($proposal_id, $dir_name)
+{
+    $proposal_id = $proposal_id;
+    $dir_name = $dir_name;
+    $query = db_query("SELECT directory_name,id FROM case_study_proposal WHERE id = :proposal_id", array(
+        ':proposal_id' => $proposal_id,
+    ));
+    $result = $query->fetchObject();
+    if ($result != null) {
+        $files = scandir(cfd_hackathon_submissions_path());
+        $files_id_dir = cfd_hackathon_submissions_path() . $result->id;
+        //var_dump($files);die;
+        $file_dir = cfd_hackathon_submissions_path() . $result->directory_name;
+        if (is_dir($file_dir)) {
+            $new_directory_name = rename(cfd_hackathon_submissions_path() . $result->directory_name, cfd_hackathon_submissions_path() . $dir_name);
+            return $new_directory_name;
+        } //is_dir($file_dir)
+        else if (is_dir($files_id_dir)) {
+            $new_directory_name = rename(cfd_hackathon_submissions_path() . $result->id, cfd_hackathon_submissions_path() . $dir_name);
+            return $new_directory_name;
+        } //is_dir($files_id_dir)
+        else {
+            drupal_set_message('Directory not available for rename.');
+            return;
+        }
+    } //$result != NULL
+    else {
+        drupal_set_message('Project directory name not present in databse');
+        return;
+    }
+    return;
+}
+function CreateReadmeFileCaseStudyHackathon($proposal_id)
+{
+    $result = db_query("
+                        SELECT * from case_study_proposal WHERE id = :proposal_id", array(
+        ":proposal_id" => $proposal_id,
+    ));
+    $proposal_data = $result->fetchObject();
+    $root_path = cfd_hackathon_submissions_path();
+    $readme_file = fopen($root_path . $proposal_data->directory_name . "/README.txt", "w") or die("Unable to open file!");
+    $txt = "";
+    $txt .= "About the Case Study";
+    $txt .= "\n" . "\n";
+    $txt .= "Title Of The cfd hackathon Project: " . $proposal_data->project_title . "\n";
+    $txt .= "Proposar Name: " . $proposal_data->name_title . " " . $proposal_data->contributor_name . "\n";
+    $txt .= "University: " . $proposal_data->university . "\n";
+    $txt .= "\n" . "\n";
+    $txt .= " cfd hackathon Project By FOSSEE, IIT Bombay" . "\n";
+    fwrite($readme_file, $txt);
+    fclose($readme_file);
+    return $txt;
+}
+function _hackathon_rrmdir_project($prop_id)
+{
+    $proposal_id = $prop_id;
+    $result = db_query("SELECT * from case_study_proposal WHERE id = :proposal_id", array(
+        ":proposal_id" => $proposal_id,
+    ));
+    $proposal_data = $result->fetchObject();
+    $root_path = cfd_hackathon_submissions_document_path();
+    $dir = $root_path . $proposal_data->directory_name;
+    if ($proposal_data->id == $prop_id) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir . "/" . $object) == "dir") {
+                        rrmdir($dir . "/" . $object);
+                    } //filetype($dir . "/" . $object) == "dir"
+                    else {
+                        unlink($dir . "/" . $object);
+                    }
+                } //$object != "." && $object != ".."
+            } //$objects as $object
+            reset($objects);
+            rmdir($dir);
+            $msg = drupal_set_message("Directory deleted successfully");
+            return $msg;
+        } //is_dir($dir)
+        $msg = drupal_set_message("Directory not present");
+        return $msg;
+    } //$proposal_data->id == $prop_id
+    else {
+        $msg = drupal_set_message("Data not found");
+        return $msg;
+    }
+}
+function hackathon_rrmdir($dir)
+{
+    if (is_dir($dir)) {
+        $objects = scandir($dir);
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (filetype($dir . "/" . $object) == "dir") {
+                    rrmdir($dir . "/" . $object);
+                } else {
+                    unlink($dir . "/" . $object);
+                }
+
+            } //$object != "." && $object != ".."
+        } //$objects as $object
+        reset($objects);
+        rmdir($dir);
+    } //is_dir($dir)
+}
