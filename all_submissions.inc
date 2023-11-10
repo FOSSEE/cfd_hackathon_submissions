@@ -12,13 +12,20 @@ function cfd_hackathon_display_all_submissions()
     }
     $output = "";
     $final_submission_rows = array();
+
     $query = db_select('cfd_hackathon_proposal');
     $query->fields('cfd_hackathon_proposal');
     //$query->condition('approval_status', 2);
-    $query->condition('uid',$user->uid);
+    //$query->condition('uid',$user->uid);
     $query->orderBy('id', 'DESC');
     $my_proposals_q = $query->execute();
     while($final_submission_data = $my_proposals_q->fetchObject()){
+        $query_user = db_select('cfd_hackathon_user_profile');
+    $query_user->fields('cfd_hackathon_user_profile');
+    $query_user->condition('uid', $final_submission_data->uid);
+    //$query_user->condition('approval_status', '1');
+    $user_q = $query_user->execute();
+    $user_data = $user_q->fetchObject();
     $today = date("Y-m-d H:i:s");
     if($final_submission_data->approval_status == 1){
     $action =  l('Release', 'cfd-hackathon/release/' . $final_submission_data->id);
@@ -33,7 +40,7 @@ elseif ($final_submission_data->approval_status == 3) {
     $expected_date_of_completion = date('d-m-Y h:i A', $final_submission_data->expected_date_of_completion);
     $final_submission_rows[$final_submission_data->id] = array(
         $creation_date,
-       // l($final_submission_data->contributor_name, 'user/' . $final_submission_data->uid),
+        $user_data->contributor_name,
         $final_submission_data->project_title,
         $expected_date_of_completion,
         $action
@@ -43,7 +50,7 @@ elseif ($final_submission_data->approval_status == 3) {
      //!$pending_rows
     $final_submission_header = array(
         'Date of Submission',
-        //'Name',
+        'Name',
         'Project title',
         'Expected Date of Completion',
         ''
