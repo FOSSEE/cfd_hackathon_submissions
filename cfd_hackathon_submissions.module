@@ -269,13 +269,13 @@ function cfd_hackathon_submissions_menu()
         'file' => 'cfd_hackathon_submissions_details.inc',
     );
     /* LABS IN PROGRESS */
-    $items['cfd-hackathon/case-study-progress'] = array(
+    $items['cfd-hackathon/in-progress'] = array(
         'title' => 'Case studies in Progress',
         'page callback' => 'cfd_hackathon_submissions_progress_all',
         'access arguments' => array(
             'cfd hackathon download code',
         ),
-        'file' => 'cfd_hackathon_submissions_details.inc',
+        'file' => 'all_submissions.inc',
     );
     $items['cfd-hackathon/list-of-project-titles'] = array(
         'title' => 'List of available Project titles',
