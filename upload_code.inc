@@ -89,7 +89,7 @@ function cfd_hackathon_submissions_upload_abstract_code_form($form, &$form_state
     );
     $form['cancel'] = array(
         '#type' => 'item',
-        '#markup' => l(t('Cancel'), 'case-study-project/abstract-code'),
+        '#markup' => l(t('Cancel'), 'cfd-hackathon/my-submissions'),
     );
     return $form;
 }

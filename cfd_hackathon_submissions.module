@@ -51,6 +51,32 @@ function cfd_hackathon_submissions_menu()
         'type' => MENU_CALLBACK,
         'file' => 'release.inc',
     );
+    $items['cfd-hackathon/mark-completed'] = array(
+        'title' => 'Mark as Completed',
+        'description' => 'Mark as Completed',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_mark_completed_project_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon create proposal',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'release.inc',
+    );
+    $items['cfd-hackathon/view-submission'] = array(
+        'title' => 'View Submission',
+        'description' => 'View Submission',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'cfd_hackathon_view_submission_form',
+        ),
+        'access arguments' => array(
+            'cfd hackathon manage proposal',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'manage_proposal.inc',
+    );
     $items['cfd-hackathon/upload-project-files'] = array(
         'title' => 'cfd hackathon Project Directory Submission',
         'description' => 'Abstract Submission',
@@ -294,7 +320,7 @@ function cfd_hackathon_submissions_menu()
         'type' => MENU_CALLBACK,
         'file' => 'available_project_titles_list.inc',
     );
-    $items['cfd-hackathon/download/project-file'] = array(
+    $items['cfd-hackathon/download/project-files'] = array(
         'title' => 'Download Project file',
         'description' => 'Download project file',
         'page callback' => 'cfd_hackathon_submissions_project_files',
@@ -319,7 +345,7 @@ function cfd_hackathon_submissions_menu()
         'file' => 'settings.inc',
     );
     /* AJAX REQUEST */
-    $items['cfd-hackathon/certificates'] = array(
+    /*$items['cfd-hackathon/certificates'] = array(
         'title' => 'List of cfd hackathon Certificates',
         'description' => 'List of cfd hackathon Certificates',
         'page callback' => '_list_case_study_certificates',
@@ -341,28 +367,6 @@ function cfd_hackathon_submissions_menu()
         ),
         'file' => 'pdf/cert_new.inc',
     );
-    /*$items['cfd-hackathon/certificates-custom'] = array(
-    'title'=> 'List of cfd hackathon Custom Certificates',
-    'description'=> 'List of cfd hackathon Custom Certificates',
-    'page callback'=> '_list_cfd_hackathon_submissions_custom_certificates',
-    'access arguments'=> array(
-    'list cfd hackathon custom certificates'
-    ),
-    'file'=> 'pdf/list_mentor_certificates.inc'
-    );
-    $items['cfd-hackathon/certificates-custom/pdf'] = array(
-    'title'=> 'Download Certificate',
-    'description'=> 'Download Certificate',
-    'page callback'=> 'drupal_get_form',
-    'page arguments'=> array(
-    'generate_pdf'
-    ),
-    'type'=> MENU_CALLBACK,
-    'access arguments'=> array(
-    'generate pdf'
-    ),
-    'file'=> 'pdf/mentor_cert_pdf.inc'
-    ); */
     $items['cfd-hackathon/certificates/verify'] = array(
         "title" => "Certificate Verification",
         "page callback" => "verify_certificates",
@@ -374,7 +378,7 @@ function cfd_hackathon_submissions_menu()
         ),
         'type' => MENU_CALLBACK,
         'file' => 'pdf/verify_certificates.inc',
-    );
+    );*/
     return $items;
 }
 /**

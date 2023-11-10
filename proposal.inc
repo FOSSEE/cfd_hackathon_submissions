@@ -28,7 +28,7 @@ function cfd_hackathon_submissions_proposal_form($form, &$form_state, $no_js_use
 	if ($user->uid == 0)
 	{
 		$msg = drupal_set_message(t('It is mandatory to ' . l('login', 'user') . ' on this website to access the case study proposal form. If you are new user please create a new account first.'), 'error');
-		drupal_goto('user');
+		drupal_goto('user/login', array('query' => drupal_get_destination()));
 		return $msg;
 	} //$user->uid == 0
 	$query = db_select('cfd_hackathon_proposal');

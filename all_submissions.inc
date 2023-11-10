@@ -28,7 +28,7 @@ function cfd_hackathon_display_all_submissions()
     $user_data = $user_q->fetchObject();
     $today = date("Y-m-d H:i:s");
     if($final_submission_data->approval_status == 1){
-    $action =  l('Release', 'cfd-hackathon/release/' . $final_submission_data->id);
+    $action =  l('Release', 'cfd-hackathon/release/' . $final_submission_data->id) . ' | ' . l('View Submission', 'cfd-hackathon/view-submission/' . $final_submission_data->id) . ' | ' . l('Mark Completed', 'cfd-hackathon/mark-completed/' . $final_submission_data->id);
 }
 elseif ($final_submission_data->approval_status == 0) {
     $action = t('This title has been discontinued');
