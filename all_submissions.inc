@@ -42,6 +42,7 @@ elseif ($final_submission_data->approval_status == 3) {
         $creation_date,
         $user_data->contributor_name,
         $final_submission_data->project_title,
+        $final_submission_data->version,
         $expected_date_of_completion,
         $action
     );
@@ -52,6 +53,7 @@ elseif ($final_submission_data->approval_status == 3) {
         'Date of Submission',
         'Name',
         'Project title',
+        'Version',
         'Expected Date of Completion',
         ''
     );

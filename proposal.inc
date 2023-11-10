@@ -21,6 +21,31 @@ case_study_solution : approval_status
 1 - Approved
 2 - Disapproved (delete it)
 */
+function cfd_hackathon_submissions_proposal(){
+	 global $user;
+    if ($user->uid == 0)
+    {
+        $msg = drupal_set_message(t('It is mandatory to log in on this website to upload your submission. If you are new user please create a new account first.'), 'error');
+        drupal_goto('user/login', array('query' => drupal_get_destination()));
+        return $msg;
+    } //$user->uid == 0
+    $today = date("Y-m-d H:i:s");
+    //var_dump($today);die;
+    $start_date = variable_get('cfd_hackathon_start_date', ''); 
+    $last_date = variable_get('cfd_hackathon_last_date', '');
+    $return_html = '';
+    if($today < $start_date){
+        $return_html .= '<p>You can submit your proposal at anytime between ' . $start_date . ' and ' . $last_date . '.</p>';
+    }
+    elseif($today > $last_date){
+        $return_html .= '<p>Proposal submission is closed.</p>';
+    }
+    else{
+        $submission_form = drupal_get_form("cfd_hackathon_submissions_proposal_form");
+        $return_html .= drupal_render($submission_form);
+    }
+    return $return_html;
+}
 function cfd_hackathon_submissions_proposal_form($form, &$form_state, $no_js_use = FALSE)
 {
 	global $user;
@@ -52,8 +77,7 @@ function cfd_hackathon_submissions_proposal_form($form, &$form_state, $no_js_use
 			drupal_goto('');
 			return;
 		} //$proposal_data->approval_status == 0 || $proposal_data->approval_status == 1
-	} //$proposal_data
-	
+	}
 	$form['#attributes'] = array(
 		'enctype' => "multipart/form-data"
 	);

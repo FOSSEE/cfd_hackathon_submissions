@@ -65,6 +65,24 @@ function cfd_hackathon_submissions_settings_form($form, $form_state)
 		'#required' => TRUE,
 		'#default_value' => variable_get('list_of_available_projects_file', '')
 	);
+	$form['extensions']['cfd_hackathon_start_date'] = array(
+        '#type' => 'textfield',
+        '#title' => t('CFD Hackathon start date'),
+        '#description' => t('For eg: 2022-02-28 23:59:59.0, enter in this format'),
+        '#size' => 50,
+        '#maxlength' => 255,
+        '#required' => TRUE,
+        '#default_value' => variable_get('cfd_hackathon_start_date', '')
+    );
+    $form['extensions']['cfd_hackathon_last_date'] = array(
+        '#type' => 'textfield',
+        '#title' => t('CFD Hackathon Last date'),
+        '#description' => t('For eg: 2022-02-28 23:59:59.0, enter in this format'),
+        '#size' => 50,
+        '#maxlength' => 255,
+        '#required' => TRUE,
+        '#default_value' => variable_get('cfd_hackathon_last_date', '')
+    );
 	$form['submit'] = array(
 		'#type' => 'submit',
 		'#value' => t('Submit')
@@ -84,5 +102,7 @@ function cfd_hackathon_submissions_settings_form_submit($form, &$form_state)
 	variable_set('hackathon_submissions_abstract_upload_extensions', $form_state['values']['abstract_upload']);
 	variable_set('hackathon_submissions_project_files_extensions', $form_state['values']['hackathon_submissions_upload']);
 	variable_set('list_of_available_projects_file', $form_state['values']['list_of_available_projects_file']);
+	variable_set('cfd_hackathon_start_date', $form_state['values']['cfd_hackathon_start_date']);
+	variable_set('cfd_hackathon_last_date', $form_state['values']['cfd_hackathon_last_date']);
 	drupal_set_message(t('Settings updated'), 'status');
 }

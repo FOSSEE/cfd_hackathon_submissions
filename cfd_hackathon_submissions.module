@@ -28,10 +28,10 @@ function cfd_hackathon_submissions_menu()
     $items['cfd-hackathon/proposal'] = array(
         'title' => 'cfd hackathon Proposal Form',
         'description' => 'cfd hackathon Proposal Form',
-        'page callback' => 'drupal_get_form',
-        'page arguments' => array(
+        'page callback' => 'cfd_hackathon_submissions_proposal',
+        /*'page arguments' => array(
             'cfd_hackathon_submissions_proposal_form',
-        ),
+        ),*/
         'access arguments' => array(
             'cfd hackathon create proposal',
         ),
