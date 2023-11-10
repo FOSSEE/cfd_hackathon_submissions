@@ -46,7 +46,7 @@ function _project_titles($version){
 		$preference_rows[] = array(
 				$i,
 				//print_r(array_keys($case_studies_list))
-				l($result->project_title, 'case-study-project/download/project-title-file/' .$result->case_study_id),
+				l($result->project_title, 'https://cfd.fossee.in/case-study-project/case-study-run/' .$result->case_study_id),
 				$result->complexity,
 				$result->no_of_days
 				);
