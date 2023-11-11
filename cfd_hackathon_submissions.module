@@ -3,8 +3,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-/*require_once 'general_deletion.inc';
-require_once 'email.inc';*/
+/*require_once 'general_deletion.inc';*/
+require_once 'email.inc';
 /**
  * Implementation of hook_menu().
  */

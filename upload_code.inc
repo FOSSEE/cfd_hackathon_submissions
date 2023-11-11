@@ -396,7 +396,7 @@ function cfd_hackathon_submissions_upload_abstract_code_form_submit($form, &$for
         'Cc' => $cc,
         'Bcc' => $bcc,
     );
-    if (!drupal_mail('cfd_hackathon', 'abstract_uploaded', $email_to, language_default(), $params, $from, true)) {
+    if (!drupal_mail('cfd_hackathon_submissions', 'abstract_uploaded', $email_to, language_default(), $params, $from, true)) {
         drupal_set_message('Error sending email message.', 'error');
     }
 
