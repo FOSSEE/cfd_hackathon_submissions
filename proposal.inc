@@ -523,13 +523,13 @@ function cfd_hackathon_submissions_proposal_form_submit($form, &$form_state)
 		return;
 	} //!$proposal_id
 	/* sending email */
-	/*$email_to = $user->mail;
-	$form = variable_get('case_study_from_email', '');
-	$bcc = variable_get('case_study_emails', '');
-	$cc = variable_get('case_study_cc_emails', '');
-	$params['case_study_proposal_received']['result1'] = $result1;
-	$params['case_study_proposal_received']['user_id'] = $user->uid;
-	$params['case_study_proposal_received']['headers'] = array(
+	$email_to = $user->mail;
+	$form = variable_get('hackathon_submissions_from_email', '');
+	$bcc = variable_get('hackathon_submissions_emails', '');
+	$cc = variable_get('hackathon_submissions_cc_emails', '');
+	$params['cfd_hackathon_submissions_proposal_received']['proposal_id'] = $proposal_id;
+	$params['cfd_hackathon_submissions_proposal_received']['user_id'] = $user->uid;
+	$params['cfd_hackathon_submissions_proposal_received']['headers'] = array(
 		'From' => $form,
 		'MIME-Version' => '1.0',
 		'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
@@ -538,8 +538,8 @@ function cfd_hackathon_submissions_proposal_form_submit($form, &$form_state)
 		'Cc' => $cc,
 		'Bcc' => $bcc
 	);
-	if (!drupal_mail('case_study', 'case_study_proposal_received', $email_to, user_preferred_language($user), $params, $form, TRUE))
-		drupal_set_message('Error sending email message.', 'error');*/
+	if (!drupal_mail('cfd_hackathon_submissions', 'cfd_hackathon_submissions_proposal_received', $email_to, user_preferred_language($user), $params, $form, TRUE))
+		drupal_set_message('Error sending email message.', 'error');
 	drupal_set_message(t('We have received your proposal.'), 'status');
 	drupal_goto('cfd-hackathon/my-submissions');
 }
