@@ -107,12 +107,22 @@ function cfd_hackathon_release_project_form_submit($form, $form_state){
 		":proposal_id" => $proposal_id
 	);
 	$result = db_query($query, $args);
-	$email_to = $user->mail;
+	$query = db_select('cfd_hackathon_proposal');
+	$query->fields('cfd_hackathon_proposal');
+	$query->condition('id', $proposal_id);
+	$proposal_q = $query->execute();
+	$proposal_data = $proposal_q->fetchObject();
+	$query = db_select('cfd_hackathon_user_profile');
+	$query->fields('cfd_hackathon_user_profile');
+	$query->condition('uid', $proposal_data->uid);
+	$user_q = $query->execute();
+	$user_data = $user_q->fetchObject();
+	$email_to = $user_data->mail;
 	$form = variable_get('hackathon_submissions_from_email', '');
 	$bcc = variable_get('hackathon_submissions_emails', '');
 	$cc = variable_get('hackathon_submissions_cc_emails', '');
 	$params['cfd_hackathon_submissions_proposal_released']['proposal_id'] = $proposal_id;
-	$params['cfd_hackathon_submissions_proposal_released']['user_id'] = $user->uid;
+	$params['cfd_hackathon_submissions_proposal_released']['user_id'] = $user_data->uid;
 	$params['cfd_hackathon_submissions_proposal_released']['headers'] = array(
 		'From' => $form,
 		'MIME-Version' => '1.0',
@@ -242,12 +252,22 @@ function cfd_hackathon_mark_completed_project_form_submit($form, $form_state){
 		":proposal_id" => $proposal_id
 	);
 	$result = db_query($query, $args);
-	$email_to = $user->mail;
+	$query = db_select('cfd_hackathon_proposal');
+	$query->fields('cfd_hackathon_proposal');
+	$query->condition('id', $proposal_id);
+	$proposal_q = $query->execute();
+	$proposal_data = $proposal_q->fetchObject();
+	$query = db_select('cfd_hackathon_user_profile');
+	$query->fields('cfd_hackathon_user_profile');
+	$query->condition('uid', $proposal_data->uid);
+	$user_q = $query->execute();
+	$user_data = $user_q->fetchObject();
+	$email_to = $user_data->mail;
 	$form = variable_get('hackathon_submissions_from_email', '');
 	$bcc = variable_get('hackathon_submissions_emails', '');
 	$cc = variable_get('hackathon_submissions_cc_emails', '');
 	$params['cfd_hackathon_submissions_proposal_completed']['proposal_id'] = $proposal_id;
-	$params['cfd_hackathon_submissions_proposal_completed']['user_id'] = $user->uid;
+	$params['cfd_hackathon_submissions_proposal_completed']['user_id'] = $user_data->uid;
 	$params['cfd_hackathon_submissions_proposal_completed']['headers'] = array(
 		'From' => $form,
 		'MIME-Version' => '1.0',
