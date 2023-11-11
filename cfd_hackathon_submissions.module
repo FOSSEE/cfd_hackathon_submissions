@@ -636,10 +636,10 @@ function _cfd_hackathon_list_of_case_studies($selected_version = NULL)
 //var_dump(_expected_date_of_completion("Study of flow around a re-entry space capsule and a parachute using Openfoam", "12 Oct 2023"));die;
 function _expected_date_of_completion($project_title, $proposal_creation_date){
     $result = db_query("SELECT no_of_days from available_hackathon_project_titles WHERE project_title =:project_title", array(':project_title' => $project_title));
-    $no_of_days = $result->fetchObject()->no_of_days;
+    $no_of_days = $result->fetchObject()->no_of_days+1;
     //var_dump($no_of_days);die;
     $date_of_completion = strtotime("+". $no_of_days ." day", strtotime($proposal_creation_date));
-    $expected_date_of_completion = date('d-m-Y h:i A', strtotime("+1day", $date_of_completion));
+    $expected_date_of_completion = date('d-m-Y h:i A', $date_of_completion);
     return $expected_date_of_completion;
 
 }
