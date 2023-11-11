@@ -35,7 +35,7 @@ We have received your proposal for the hackathon with the following details:
 
 Full Name: ' . $proposal_user_data->name_title . ' ' . $proposal_user_data->contributor_name . '
 Email: ' . $user->mail . '
-University/Institute: ' . $proposal_data->university . '
+University/Institute: ' . $proposal_user_data->university . '
 Project Title: ' . $proposal_data->project_title . '
 Date of Proposal: ' . date('d/m/Y', $proposal_data->creation_date) . '
 Expected Date of Completion: ' . date('d/m/Y', $proposal_data->expected_date_of_completion) . '
@@ -65,7 +65,7 @@ FOSSEE,IIT Bombay', array(
             $proposal_user_data = $user_q->fetchObject();
             $user = user_load($params['cfd_hackathon_submissions_proposal_released']['user_id']);
             $message['headers'] = $params['cfd_hackathon_submissions_proposal_released']['headers'];
-            $message['subject'] = t('[!site_name][OpenFOAM hackathon] Your proposal has been release', array(
+            $message['subject'] = t('[!site_name][OpenFOAM hackathon] Your proposal has been released', array(
                 '!site_name' => variable_get('site_name', ''),
             ), array(
                 'language' => $language->language,
@@ -78,7 +78,7 @@ Your proposal with the following details has been released. You may propose a ne
 
 Full Name: ' . $proposal_user_data->name_title . ' ' . $proposal_user_data->contributor_name . '
 Email: ' . $user->mail . '
-University/Institute: ' . $proposal_data->university . '
+University/Institute: ' . $proposal_user_data->university . '
 Project Title: ' . $proposal_data->project_title . '
 Date of Proposal: ' . date('d/m/Y', $proposal_data->creation_date) . '
 Expected Date of Completion: ' . date('d/m/Y', $proposal_data->expected_date_of_completion) . '
@@ -164,10 +164,7 @@ Your  Case Study Project proposal with the following details has been approved:
 
 Full Name: ' . $proposal_data->name_title . ' ' . $proposal_data->contributor_name . '
 Email: ' . $user_data->mail . '
-University/Institute: ' . $proposal_data->university . '
-City: ' . $proposal_data->city . '
-State: ' . $proposal_data->state . '
-Country: ' . $proposal_data->country . '
+University/Institute: ' . $proposal_user_data->university . '
 Project Title: ' . $proposal_data->project_title . '
 Date of Proposal: ' . date('d/m/Y', $proposal_data->creation_date) . '
 Expected Date of Completion: ' . date('d/m/Y', $proposal_data->expected_date_of_completion) . '
@@ -212,10 +209,7 @@ Your  proposal with the following details is marked completed.
 
 Full Name: ' . $proposal_user_data->name_title . ' ' . $proposal_user_data->contributor_name . '
 Email: ' . $user_data->mail . '
-University/Institute: ' . $proposal_data->university . '
-City: ' . $proposal_data->city . '
-State: ' . $proposal_data->state . '
-Country: ' . $proposal_data->country . '
+University/Institute: ' . $proposal_user_data->university . '
 Project Title: ' . $proposal_data->project_title . '
 Best Wishes,
 
