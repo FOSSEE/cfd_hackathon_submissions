@@ -639,7 +639,7 @@ function _expected_date_of_completion($project_title, $proposal_creation_date){
     $days = $result->fetchObject()->no_of_days;
     $no_of_days = $days+1;
     //var_dump($no_of_days);die;
-    $date_of_completion = strtotime("+" . $no_of_days . " day", strtotime($proposal_creation_date));
+    $date_of_completion = strtotime('+' . $no_of_days . ' day', strtotime($proposal_creation_date));
     //var_dump($date_of_completion);die;
     $expected_date_of_completion = date('d-m-Y h:i A', date($date_of_completion));
     return $expected_date_of_completion;
