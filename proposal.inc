@@ -306,7 +306,7 @@ else{
 	$form['date_of_proposal'] = array(
 		'#type' => 'date_popup',
 		'#title' => t('Date of Proposal'),
-		'#default_value' => date("Y-m-d H:i:s"),
+		'#default_value' => date("Y-m-d", time()),
 		'#date_format' => 'd-m-Y',
 		'#disabled' => TRUE,
 		'#date_label_position' => '',
