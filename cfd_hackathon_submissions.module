@@ -638,7 +638,7 @@ function _expected_date_of_completion($project_title, $proposal_creation_date){
     $result = db_query("SELECT no_of_days from available_hackathon_project_titles WHERE project_title =:project_title", array(':project_title' => $project_title));
     $days = $result->fetchObject()->no_of_days;
     $no_of_days = $days+1;
-    $expected_date_of_completion = date('Y-m-d H:i:s',date(strtotime('+' . $no_of_days  . 'days', strtotime($proposal_creation_date))));
+    $expected_date_of_completion = date('Y-m-d H:i:s', strtotime('+' . $no_of_days . ' days'));
     return $expected_date_of_completion;
 }
 
