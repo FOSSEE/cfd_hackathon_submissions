@@ -637,9 +637,9 @@ function _cfd_hackathon_list_of_case_studies($selected_version = NULL)
 function _expected_date_of_completion($project_title, $proposal_creation_date){
     $result = db_query("SELECT no_of_days from available_hackathon_project_titles WHERE project_title =:project_title", array(':project_title' => $project_title));
     $days = $result->fetchObject()->no_of_days;
-    $no_of_days = $days+1;
-    $date_of_completion = strtotime('+' . $no_of_days . ' day', strtotime($proposal_creation_date));
-    $expected_date_of_completion = date('d-m-Y h:i A', date($date_of_completion));
+    $no_of_days = $days;
+    //$date_of_completion = strtotime('+' . $no_of_days . ' day', strtotime($proposal_creation_date));
+    $expected_date_of_completion = date('d-m-Y h:i A',strtotime($date_of_completion . '+' . $no_of_days . ' days'));
     //var_dump($expected_date_of_completion);die;
     return $expected_date_of_completion;
 
