@@ -31,7 +31,7 @@ function cfd_hackathon_view_submission_form($form, $form_state){
 		'#type' => 'item',
 		'#title' => t('Email'),
 		'#size' => 30,
-		'#value' => $user->mail,
+		'#markup' => user_load($proposal_data->uid)->mail,
 		'#disabled' => TRUE
 	);
 	$form['contributor_contact_no'] = array(

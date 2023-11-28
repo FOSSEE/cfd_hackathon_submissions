@@ -34,7 +34,7 @@ elseif ($final_submission_data->approval_status == 0) {
     $action = t('This title has been discontinued');
 }
 elseif ($final_submission_data->approval_status == 3) {
-    $action = t('This title has been completed');
+    $action = t('This title has been completed') . ' | ' . l('View Submission', 'cfd-hackathon/view-submission/' . $final_submission_data->id);
 }
     $creation_date = date('d-m-Y', $final_submission_data->creation_date);
     $expected_date_of_completion = date('d-m-Y h:i A', $final_submission_data->expected_date_of_completion);
@@ -115,6 +115,6 @@ function cfd_hackathon_submissions_progress_all()
         'header' => $final_submission_header,
         'rows' => $final_submission_rows
     ));
-}
     return $output;
+}
 }
