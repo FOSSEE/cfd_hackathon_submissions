@@ -312,7 +312,7 @@ FOSSEE,IIT Bombay', array(
             $proposal_user_data = $user_q->fetchObject();
             $user_data = user_load($params['cfd_hackathon_submissions_proposal_resubmit']['user_id']);
             $message['headers'] = $params['cfd_hackathon_submissions_proposal_resubmit']['headers'];
-            $message['subject'] = t('[!site_name][OpenFOAM hackathon] Your uploaded files have been marked for resubmission', array(
+            $message['subject'] = t('[!site_name][OpenFOAM hackathon] Upload your report', array(
                 '!site_name' => variable_get('site_name', ''),
             ), array(
                 'language' => $language->language,
@@ -321,7 +321,7 @@ FOSSEE,IIT Bombay', array(
                 'body' => t('
 Dear ' . $proposal_user_data->contributor_name . ',
 
-Kindly resubmit the abstract file for the project title: ' . $proposal_data->project_title . '
+This is to inform you that the submission interface will be open till 09/12/2023 midnight. Please submit a report with the methodology and results in the submission portal for the evaluation. 
 
 Best Wishes,
 
