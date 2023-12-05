@@ -321,12 +321,14 @@ FOSSEE,IIT Bombay', array(
                 'body' => t('
 Dear ' . $proposal_user_data->contributor_name . ',
 
-This is to inform you that the submission interface will be open till 09/12/2023 midnight. Please submit a report with the methodology and results in the submission portal for the evaluation. 
+This is to inform you that the submission interface will be open till 10/12/2023(Sunday) midnight. Please submit a report with the methodology and results in the submission portal for the evaluation. 
+
+Please refer to the report template' . l('here','https://hackathon.fossee.in/cfd/static/cms/uploads/pdf/report_template.pdf') . '
 
 Best Wishes,
 
 !site_name Team,
-FOSSEE,IIT Bombay', array(
+FOSSEE, IIT Bombay', array(
                     '!site_name' => variable_get('site_name', ''),
                     '!user_name' => $user_data->name,
                 ), array(
