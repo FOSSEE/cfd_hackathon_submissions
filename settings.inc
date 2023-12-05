@@ -83,6 +83,15 @@ function cfd_hackathon_submissions_settings_form($form, $form_state)
         '#required' => TRUE,
         '#default_value' => variable_get('cfd_hackathon_last_date', '')
     );
+    $form['extensions']['cfd_hackathon_report_resubmission_date'] = array(
+        '#type' => 'textfield',
+        '#title' => t('CFD Hackathon Report Resubmission date'),
+        '#description' => t('For eg: 2022-02-28 23:59:59.0, enter in this format'),
+        '#size' => 50,
+        '#maxlength' => 255,
+        '#required' => TRUE,
+        '#default_value' => variable_get('cfd_hackathon_report_resubmission_date', '')
+    );
 	$form['submit'] = array(
 		'#type' => 'submit',
 		'#value' => t('Submit')
@@ -104,5 +113,6 @@ function cfd_hackathon_submissions_settings_form_submit($form, &$form_state)
 	variable_set('list_of_available_projects_file', $form_state['values']['list_of_available_projects_file']);
 	variable_set('cfd_hackathon_start_date', $form_state['values']['cfd_hackathon_start_date']);
 	variable_set('cfd_hackathon_last_date', $form_state['values']['cfd_hackathon_last_date']);
+	variable_set('cfd_hackathon_report_resubmission_date', $form_state['values']['cfd_hackathon_report_resubmission_date']);
 	drupal_set_message(t('Settings updated'), 'status');
 }

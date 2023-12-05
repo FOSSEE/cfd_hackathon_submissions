@@ -298,6 +298,42 @@ FOSSEE,IIT Bombay', array(
                 )),
             );
             break;
+        case 'cfd_hackathon_submissions_proposal_resubmit':
+            /* initializing data */
+            $query = db_select('cfd_hackathon_proposal');
+            $query->fields('cfd_hackathon_proposal');
+            $query->condition('id', $params['cfd_hackathon_submissions_proposal_resubmit']['proposal_id']);
+            $query->range(0, 1);
+            $proposal_data = $query->execute()->fetchObject();
+            $query = db_select('cfd_hackathon_user_profile');
+            $query->fields('cfd_hackathon_user_profile');
+            $query->condition('uid', $user->uid);
+            $user_q = $query->execute();
+            $proposal_user_data = $user_q->fetchObject();
+            $user_data = user_load($params['cfd_hackathon_submissions_proposal_resubmit']['user_id']);
+            $message['headers'] = $params['cfd_hackathon_submissions_proposal_resubmit']['headers'];
+            $message['subject'] = t('[!site_name][OpenFOAM hackathon] Your uploaded files have been marked for resubmission', array(
+                '!site_name' => variable_get('site_name', ''),
+            ), array(
+                'language' => $language->language,
+            ));
+            $message['body'] = array(
+                'body' => t('
+Dear ' . $proposal_user_data->contributor_name . ',
+
+Kindly resubmit the abstract file for the project title: ' . $proposal_data->project_title . '
+
+Best Wishes,
+
+!site_name Team,
+FOSSEE,IIT Bombay', array(
+                    '!site_name' => variable_get('site_name', ''),
+                    '!user_name' => $user_data->name,
+                ), array(
+                    'language' => $language->language,
+                )),
+            );
+            break;
 /**************************************************************/
         case 'abstract_edit_file_uploaded':
             // $solution_q = db_query("SELECT * FROM {cfd_hackathon_submissions_solution} WHERE id = %d LIMIT 1", $params['abstract_uploaded']['solution_id']);

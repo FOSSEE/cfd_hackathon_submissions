@@ -12,6 +12,10 @@ function cfd_hackathon_view_submission_form($form, $form_state){
 	$query->condition('uid', $proposal_data->uid);
 	$user_q = $query->execute();
 	$user_data = $user_q->fetchObject();
+	$query = db_select('cfd_hackathon_submitted_abstracts');
+    $query->fields('cfd_hackathon_submitted_abstracts');
+    $query->condition('proposal_id', $proposal_id);
+    $abstracts_q = $query->execute()->fetchObject();
 	$form['#attributes'] = array(
 		'enctype' => "multipart/form-data"
 	);
@@ -87,23 +91,56 @@ function cfd_hackathon_view_submission_form($form, $form_state){
 		'#type' => 'checkbox', 
 		'#title' => t('Release the project title'),
 	);*/
+	if($abstracts_q->is_submitted == 1){
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Resubmit the Abstract'),
+	);
+}
 	$form['back'] = array(
-        '#type' => 'markup',
+        '#type' => 'item',
         '#markup' => l(t('Go back'), 'cfd-hackathon/all-submissions'),
     );
 	return $form;
 }
 
-/*function cfd_hackathon_view_submission_form_submit($form, $form_state){
+function cfd_hackathon_view_submission_form_submit($form, $form_state){
 	global $user;
 	$proposal_id = (int) arg(2);
 	$v = $form_state['values'];
-	$query = "UPDATE cfd_hackathon_proposal SET approval_status = :release_status WHERE id = :proposal_id";
+	$query = "UPDATE cfd_hackathon_submitted_abstracts SET is_submitted = :submission_status WHERE proposal_id = :proposal_id";
 	$args = array(
-		":release_status" => 0,
+		":submission_status" => 0,
 		":proposal_id" => $proposal_id
 	);
 	$result = db_query($query, $args);
-    drupal_set_message(t('Project title has been released successfully, you may propose a new title'), 'status');
+	$query = db_select('cfd_hackathon_proposal');
+	$query->fields('cfd_hackathon_proposal');
+	$query->condition('id', $proposal_id);
+	$proposal_q = $query->execute();
+	$proposal_data = $proposal_q->fetchObject();
+	$query = db_select('cfd_hackathon_user_profile');
+	$query->fields('cfd_hackathon_user_profile');
+	$query->condition('uid', $proposal_data->uid);
+	$user_q = $query->execute();
+	$user_data = $user_q->fetchObject();
+	$email_to = $user_data->mail;
+	$form = variable_get('hackathon_submissions_from_email', '');
+	$bcc = variable_get('hackathon_submissions_emails', '');
+	$cc = variable_get('hackathon_submissions_cc_emails', '');
+	$params['cfd_hackathon_submissions_proposal_resubmit']['proposal_id'] = $proposal_id;
+	$params['cfd_hackathon_submissions_proposal_resubmit']['user_id'] = $user_data->uid;
+	$params['cfd_hackathon_submissions_proposal_resubmit']['headers'] = array(
+		'From' => $form,
+		'MIME-Version' => '1.0',
+		'Content-Type' => 'text/plain; charset=UTF-8; format=flowed; delsp=yes',
+		'Content-Transfer-Encoding' => '8Bit',
+		'X-Mailer' => 'Drupal',
+		'Cc' => $cc,
+		'Bcc' => $bcc
+	);
+	if (!drupal_mail('cfd_hackathon_submissions', 'cfd_hackathon_submissions_proposal_resubmit', $email_to, user_preferred_language($user), $params, $form, TRUE))
+		drupal_set_message('Error sending email message.', 'error');
+    drupal_set_message(t('Marked for resubmission and user has been notified'), 'status');
     drupal_goto('cfd-hackathon/all-submissions');
-}*/
+}
