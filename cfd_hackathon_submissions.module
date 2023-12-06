@@ -89,6 +89,18 @@ function cfd_hackathon_submissions_menu()
         'type' => MENU_CALLBACK,
         'file' => 'upload_code.inc',
     );
+    $items['cfd-hackathon/resubmit-project-files'] = array(
+        'title' => 'CFD hackathon Project Directory Re-Submission',
+        'description' => 'Abstract Re-Submission',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('cfd_hackathon_submissions_reupload_abstract_code_form'),
+        'access callback' => 'user_access',
+        'access arguments' => array(
+            'cfd hackathon upload abstract',
+        ),
+        'type' => MENU_CALLBACK,
+        'file' => 'reupload_code.inc',
+    );
      $items["cfd-hackathon/my-submissions"] = array(
         "title" => "List of my submissions",
         "page callback" => "cfd_hackathon_display_my_submissions",

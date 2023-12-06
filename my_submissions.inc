@@ -24,16 +24,24 @@ function cfd_hackathon_display_my_submissions()
         drupal_set_message('We have not received your submission', 'error');
         drupal_goto('');
     }
+    $query = db_select('cfd_hackathon_submitted_abstracts');
+    $query->fields('cfd_hackathon_submitted_abstracts');
+    $query->condition('proposal_id', $final_submission_data->id);
+    $abstracts_q = $query->execute()->fetchObject();
     $today = date("Y-m-d H:i:s");
     if($final_submission_data->approval_status == 1){
-    $action =   l('Upload/edit project files', 'cfd-hackathon/upload-project-files/' . $final_submission_data->id) . ' | ' . l('Release', 'cfd-hackathon/release/' . $final_submission_data->id) . ' | ' . l('Mark as Completed', 'cfd-hackathon/mark-completed/' . $final_submission_data->id);
+    $action =   l('Upload/edit project files', 'cfd-hackathon/resubmit-project-files/' . $final_submission_data->id) . ' | ' . l('Release', 'cfd-hackathon/release/' . $final_submission_data->id) . ' | ' . l('Mark as Completed', 'cfd-hackathon/mark-completed/' . $final_submission_data->id);
 }
 elseif ($final_submission_data->approval_status == 0) {
     $action = t('This title has been discontinued');
 }
-elseif ($final_submission_data->approval_status == 3) {
+elseif ($final_submission_data->approval_status == 3 && $abstracts_q->is_submitted == 1) {
     $action = t('This title has been completed');
 }
+elseif ($final_submission_data->approval_status == 3 && $abstracts_q->is_submitted == 0){
+    $action = l('Resubmit project files', 'cfd-hackathon/resubmit-project-files/' . $final_submission_data->id);
+}
+
     $creation_date = date('d-m-Y', $final_submission_data->creation_date);
     $expected_date_of_completion = date('d-m-Y h:i A', $final_submission_data->expected_date_of_completion);
     $final_submission_rows[$final_submission_data->id] = array(
