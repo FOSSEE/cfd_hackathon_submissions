@@ -30,7 +30,7 @@ function cfd_hackathon_display_my_submissions()
     $abstracts_q = $query->execute()->fetchObject();
     $today = date("Y-m-d H:i:s");
     if($final_submission_data->approval_status == 1){
-    $action =   l('Upload/edit project files', 'cfd-hackathon/resubmit-project-files/' . $final_submission_data->id) . ' | ' . l('Release', 'cfd-hackathon/release/' . $final_submission_data->id) . ' | ' . l('Mark as Completed', 'cfd-hackathon/mark-completed/' . $final_submission_data->id);
+    $action =   l('Upload/edit project files', 'cfd-hackathon/upload-project-files/' . $final_submission_data->id) . ' | ' . l('Release', 'cfd-hackathon/release/' . $final_submission_data->id) . ' | ' . l('Mark as Completed', 'cfd-hackathon/mark-completed/' . $final_submission_data->id);
 }
 elseif ($final_submission_data->approval_status == 0) {
     $action = t('This title has been discontinued');

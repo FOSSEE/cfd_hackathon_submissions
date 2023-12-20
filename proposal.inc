@@ -49,6 +49,7 @@ function cfd_hackathon_submissions_proposal(){
 function cfd_hackathon_submissions_proposal_form($form, &$form_state, $no_js_use = FALSE)
 {
 	global $user;
+	$last_date = variable_get('cfd_hackathon_last_date', '');
 	/************************ start approve book details ************************/
 	if ($user->uid == 0)
 	{
@@ -303,14 +304,6 @@ else{
         ),
 		'#required' => TRUE
 	);
-	$form['date_of_proposal'] = array(
-		'#type' => 'date_popup',
-		'#title' => t('Date of Proposal'),
-		'#default_value' => date("Y-m-d", time()),
-		'#date_format' => 'd-m-Y',
-		'#disabled' => TRUE,
-		'#date_label_position' => '',
-	);
 	$list_case_study = _cfd_hackathon_list_of_case_studies();
 	#var_dump($list_case_study);die;
 	$selected_version = isset($form_state['values']['version'])?$form_state['values']['version']:key($list_case_study);
@@ -321,11 +314,11 @@ else{
          '#prefix' => '<div id="dropdown-project-titles">',
         '#suffix' => '</div>',
         '#options' => _cfd_hackathon_list_of_case_studies($selected_version),
-        '#ajax' => array(
+        /*'#ajax' => array(
             //'event'=>'replace',
             'callback' =>'expected_date_of_completion_callback',
             //'wrapper' => 'expected-completion-date',
-        ),
+        ),*/
         '#required' => TRUE,
         '#states' => array(
 			'invisible' => array(
@@ -335,20 +328,35 @@ else{
 			)
 		)
     ); 
-	if (isset($form_state['values']['expected_date_of_completion'])) {
+	/*if (isset($form_state['values']['expected_date_of_completion'])) {
         $expected_completion_date = $form_state['values']['expected_date_of_completion'];
       }
       else {
         $expected_completion_date = "";
-      }
-	//var_dump($form_state['values']['project_title']);die;
+      }*/
+      $form['date_of_proposal'] = array(
+		'#type' => 'date_popup',
+		'#title' => t('Date of Proposal'),
+		'#default_value' => date("Y-m-d", time()),
+		'#date_format' => 'd-m-Y',
+		'#disabled' => TRUE,
+		'#date_label_position' => '',
+	);
 	$form['expected_date_of_completion'] = array(
+		'#type' => 'date_popup',
+		'#title' => t('Expected date of completion'),
+		'#default_value' => date("Y-m-d", strtotime($last_date)),
+		'#date_format' => 'd-m-Y',
+		'#disabled' => TRUE,
+		'#date_label_position' => '',
+	);
+	/*$form['expected_date_of_completion'] = array(
 		'#type' => 'textfield',
 		'#title' => t('Expected Date of Completion'),
 		'#size' =>20,
 		'#value' => $expected_completion_date,
 		'#maxlength' => 20,
-		'#prefix' => '<div id="expected-completion-date">',
+		/*'#prefix' => '<div id="expected-completion-date">',
 		'#suffix' => '</div>',
 		'#required' => TRUE,
 		'#disabled' => TRUE,
@@ -358,8 +366,8 @@ else{
 					'value' => ''
 				)
 			)
-		)*/
-	);
+		)
+	);*/
 	/*$form['term_condition'] = array(
 		'#type' => 'checkboxes',
 		'#title' => t('Terms And Conditions'),
@@ -410,11 +418,11 @@ function cfd_hackathon_submissions_proposal_form_submit($form, &$form_state)
 	}
 	/* inserting the user proposal */
 	$v = $form_state["values"];
-
+$last_date = variable_get('cfd_hackathon_last_date', '');
 	//var_dump($v['expected_date_of_completion']);die;
 	$project_title = trim($v['project_title']);
 	$creation_date = $v['date_of_proposal'];
-	$expected_completion_date = strtotime(_expected_date_of_completion($project_title, $creation_date));
+	$expected_completion_date = strtotime($last_date);
 	//$expected_completion_date = strtotime("+1day", strtotime($completion_date));
 	$proposar_name = $v['name_title'] . ' ' . $v['contributor_name'];
 	$university = $v['university'];
