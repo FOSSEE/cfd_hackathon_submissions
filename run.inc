@@ -56,15 +56,15 @@ function cfd_hackathon_project_details_callback($form, $form_state)
 {
 	$commands = array();
 	$cfd_hackathon_default_value = $form_state['values']['cfd_hackathon'];
-	if ($cfd_hackathon_default_value != 0) {
-		$form['cfd_hackathon_details']['#markup'] = _cfd_hackathon_details($cfd_hackathon_default_value, $cfd_case_study_id);
-		$cfd_hackathon_details = _cfd_hackathon_information($cfd_hackathon_default_value);
-		$query = db_select('available_hackathon_project_titles');
+	$cfd_hackathon_details = _cfd_hackathon_information($cfd_hackathon_default_value);
+	$query = db_select('available_hackathon_project_titles');
     $query->fields('available_hackathon_project_titles');
     $query->condition('project_title', $cfd_hackathon_details->project_title);
     $old_case_study_q = $query->execute();
     $old_case_study_data = $old_case_study_q->fetchObject();
     $cfd_case_study_id = $old_case_study_data->case_study_id;
+	if ($cfd_hackathon_default_value != 0) {
+		$form['cfd_hackathon_details']['#markup'] = _cfd_hackathon_details($cfd_hackathon_default_value, $cfd_case_study_id);
 		$provider = user_load($cfd_hackathon_details->uid);
 		if ($cfd_hackathon_details->uid > 0) {
 			$commands[] = ajax_command_html('#ajax_selected_cfd_hackathon', l('Download Report of the Upgraded Case Study', "cfd-hackathon/download/upgraded-report/" . $cfd_hackathon_default_value) . '<br>' . l('Download Upgraded Case Files', 'cfd-hackathon/download/project-files/' . $cfd_hackathon_default_value) . '<br><br>' . l('Download the report of the Case Study', "https://cfd.fossee.in/case-study-project/download/project-file/" . $cfd_case_study_id) . '<br>' . l('Download Case Files of the Original Case Study', 'https://cfd.fossee.in/case-study-project/full-download/project/' . $cfd_case_study_id));

@@ -65,8 +65,10 @@ function cfd_hackathon_submissions_project_files()
 	}
 }
 
-function cfd_case_study_project_files() {
+function cfd_hackathon_submissions_upgraded_report() 
+{
 	$proposal_id = arg(3);
+	//var_dump($proposal_id);die;
 	$root_path = cfd_hackathon_submissions_path();
 	$query = db_select('cfd_hackathon_submitted_abstracts_file');
 	$query->fields('cfd_hackathon_submitted_abstracts_file');
@@ -80,7 +82,7 @@ function cfd_case_study_project_files() {
 	$result1 = $query1->execute();
 	$case_study = $result1->fetchObject();
 	$directory_name = $case_study->directory_name . '/';
-	$abstract_file = $cfd_case_study_project_files->filename;
+	$abstract_file = $cfd_case_study_project_files->filepath;
 	ob_clean();
 	header("Pragma: public");
 	header("Expires: 0");
