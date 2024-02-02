@@ -312,25 +312,15 @@ function cfd_hackathon_submissions_menu()
         'type' => MENU_NORMAL_ITEM,
         'file' => 'run.inc',
     );
-    $items['cfd-hackathon/download/resource-file'] = array(
-        'title' => 'Download user defined compound file',
-        'description' => 'Download resource file',
-        'page callback' => 'cfd_hackathon_submissions_download_upload_file',
+    $items['cfd-hackathon/download/upgraded-report'] = array(
+        'title' => 'Download Upgraded report',
+        'description' => 'Download Upgraded report',
+        'page callback' => 'cfd_hackathon_submissions_upgraded_report',
         'access arguments' => array(
             'download code',
         ),
         'type' => MENU_CALLBACK,
         'file' => 'download.inc',
-    );
-    $items['cfd-hackathon/download/project-title-file'] = array(
-        'title' => 'Download Project Title file',
-        'description' => 'Download Project Title file',
-        'page callback' => 'download_case_study_project_title_files',
-        'access arguments' => array(
-            'download code',
-        ),
-        'type' => MENU_CALLBACK,
-        'file' => 'available_project_titles_list.inc',
     );
     $items['cfd-hackathon/download/project-files'] = array(
         'title' => 'Download Project file',
