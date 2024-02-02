@@ -274,11 +274,11 @@ function cfd_hackathon_submissions_menu()
     /* COMPLETED  Case studies */
     $items['cfd-hackathon/completed-case-studies'] = array(
         'title' => 'Completed Case studies',
-        'page callback' => 'cfd_hackathon_submissions_completed_proposals_all',
+        'page callback' => 'cfd_hackathon_submissions_completed_proposals',
         'access arguments' => array(
             'cfd hackathon download code',
         ),
-        'file' => 'cfd_hackathon_submissions_details.inc',
+        'file' => 'all_submissions.inc',
     );
     /* LABS IN PROGRESS */
     $items['cfd-hackathon/in-progress'] = array(
