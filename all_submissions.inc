@@ -118,3 +118,61 @@ function cfd_hackathon_submissions_progress_all()
     return $output;
 }
 }
+
+function cfd_hackathon_submissions_completed_proposals()
+{
+    global $user;
+    /* get pending proposals to be approved */
+    $output = "";
+    $final_submission_rows = array();
+
+    $query = db_select('cfd_hackathon_proposal');
+    $query->fields('cfd_hackathon_proposal');
+    $query->condition('approval_status', 3);
+    $query->condition('is_completed',1);
+    $query->orderBy('uid', 'ASC');
+    $my_proposals_q = $query->execute();
+    $i = $my_proposals_q->rowCount();
+    //var_dump($i);die;
+    while($final_submission_data = $my_proposals_q->fetchObject()){
+        $query_user = db_select('cfd_hackathon_user_profile');
+    $query_user->fields('cfd_hackathon_user_profile');
+    $query_user->condition('uid', $final_submission_data->uid);
+    //$query_user->condition('approval_status', '1');
+    $user_q = $query_user->execute();
+    $user_data = $user_q->fetchObject();
+    $query = db_select('available_hackathon_project_titles');
+    $query->fields('available_hackathon_project_titles');
+    $query->condition('project_title', $final_submission_data->project_title);
+    $old_case_study_q = $query->execute();
+    $old_case_study_data = $old_case_study_q->fetchObject();
+    $expected_date_of_completion = date('Y', $final_submission_data->expected_date_of_completion);
+    $final_submission_rows[$final_submission_data->id] = array(
+        //$creation_date,
+        $i,
+        $user_data->contributor_name,
+        l($final_submission_data->project_title, 'cfd-hackathon/case-study-run/' . $final_submission_data->id . '/' . $old_case_study_data->case_study_id),
+        $final_submission_data->version,
+        $user_data->institute,
+        $expected_date_of_completion,
+       // $action
+    );
+    $i--;
+}
+    /* check if there are any pending proposals */
+     //!$pending_rows
+    $final_submission_header = array(
+        'S. No',
+        'Name',
+        'Project title',
+        'OpenFOAM Version',
+        'University/ Institute',
+        'Year of Completion'
+    );
+    //$output = theme_table($pending_header, $pending_rows);
+    $output .= theme('table', array(
+        'header' => $final_submission_header,
+        'rows' => $final_submission_rows
+    ));
+    return $output;
+}
