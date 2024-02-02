@@ -312,10 +312,10 @@ function cfd_hackathon_submissions_menu()
         'type' => MENU_NORMAL_ITEM,
         'file' => 'run.inc',
     );
-    $items['cfd-hackathon/download/resource-file'] = array(
+    $items['cfd-hackathon/download/upgraded-report'] = array(
         'title' => 'Download user defined compound file',
-        'description' => 'Download resource file',
-        'page callback' => 'cfd_hackathon_submissions_download_upload_file',
+        'description' => 'Download Upgraded report file',
+        'page callback' => 'cfd_hackathon_submissions_download_upgraded_report',
         'access arguments' => array(
             'download code',
         ),
